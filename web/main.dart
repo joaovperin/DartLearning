@@ -1,6 +1,12 @@
 import 'dart:html';
 import 'dart:core';
 
+///
+/// Docs:
+///
+/// https://dart.dev/guides/language/effective-dart/design
+///
+
 // Application
 App app;
 // output
@@ -28,7 +34,9 @@ class TodoTask {
 
 /// Main entry point
 void main() {
-  app = App()..run();
+  app = App()
+    ..load()
+    ..run();
 }
 
 class TaskRepository {
@@ -71,16 +79,21 @@ class TaskRepository {
           ..onClick.listen((e) => removeElement(newTaskElement)))));
   }
 
-  void queryElement(elm) {}
-  void alterElement(elm) {}
-  void removeElement(elm) => {elm.remove()};
+  void queryElement(Element elm) {}
+
+  void alterElement(Element elm) {}
+
+  void removeElement(Element elm) {
+    elm.remove();
+  }
 }
 
 /// Application
 class App {
   TaskRepository dao = TaskRepository();
+  void load() {}
   void run() {
-    dao.add(TodoTask("testandooo"));
-    dao.add(TodoTask("testandooodfdfdf"));
+    dao.add(TodoTask("First Test"));
+    dao.add(TodoTask("Another test... :D"));
   }
 }
