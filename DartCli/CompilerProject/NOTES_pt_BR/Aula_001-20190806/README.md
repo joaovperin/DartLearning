@@ -7,6 +7,7 @@ Um compilador é composto por um analisador léxico, um analisador sintático, u
 * Separa o código em lexemas
 * Analisa os lexemas e classifica-os em tokens;
   * Cada lexema possui apenas um token
+* Retorna a sequência de tokens identificados na forma de tuplas (lexema, token)
 * Pode realizar validação básica: identificadores não podem começar com números, não podem possuir acentos, caracteres especiais, etc
 
 ### Exemplo:
@@ -36,12 +37,16 @@ public class Zirigudim {
 | int       | T_INT         |
 | b         | T_ID          |
 
+O analisador léxico possui um buffer de lookAhead, ou seja: na prática, é uma variável que verifica o caracter que está à sua frente. Isso serve para saber quando um token finalizou.
+
 ### Análise sintática
 
-    Estrutura gramatical correta... for i in xxx blablabla        deve montar uma árvore
+* Também chamado de parser
+* Estrutura gramatical correta... for i in xxx blablabla        deve montar uma árvore
+* *"O gato cachorro"*
 
 ### Análise semântica
-
+* *"O gato dorme o rato"*
 
 
 ### Gramáticas
@@ -53,4 +58,16 @@ public class Zirigudim {
 
 Segundo a hierarquia de Chomsky, linguagens de programação são gramáticas de tipo 2 (não sensíveis ao contexto) porém com exceção na tipagem, onde aí sim são sensíveis ao contexto.
 
+----------
 
+### **Homework:**
+O professor nos deu o código fonte do analisador léxico da linguagem python (incompleto) e solicitou que implementássemos a validação para os tokens das quatro operações (+,-,*,/) e o sinal de :
+
+### **Keywords to study:** *lookahed*
+
+### **Links úteis:** 
+  * http://www.inf.ufes.br/~tavares/labcomp2000/intro2.html
+
+
+### **ToReview:** 
+  * O analisador léxico executa um *lookahead* 
