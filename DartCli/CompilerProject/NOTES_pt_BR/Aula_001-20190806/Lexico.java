@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * Lexico - Classe para implementação de um analisador Léxico básico
+ * Lexico - Classe para implementaÃ§Ã£o de um analisador LÃ©xico bÃ¡sico
  * 
  * @author Ricardo Ferreira de Oliveira
  * @author turma de compiladores de 1/2019
@@ -22,448 +22,511 @@ import javax.swing.filechooser.FileFilter;
 
 public class Lexico {
 
-	static final int T_AND             =   1;
-	static final int T_ASSERT          =   2;
-	static final int T_BREAK           =   3;
-	static final int T_CLASS           =   4;
-	static final int T_CONTINUE        =   5;
-	static final int T_DEF             =   6;
-	static final int T_DEL             =   7;
-	static final int T_ELIF            =   8;
-	static final int T_ELSE            =   9;
-	static final int T_EXCEPT          =   10;
-	static final int T_EXEC            =   11;	
-	static final int T_FINALLY         =   12;
-	static final int T_FOR             =   13;
-	static final int T_FROM            =   14;
-	static final int T_GLOBAL          =   15;
-	static final int T_IF              =   16;
-	static final int T_IMPORT          =   17;
-	static final int T_IN              =   18;
-	static final int T_IS              =   19;
-	static final int T_LAMBDA          =   20;
-	static final int T_NOT             =   21;
-	static final int T_OR              =   22;
-	static final int T_PASS            =   23;
-	static final int T_PRINT           =   24;
-	static final int T_RAISE           =   25;
-	static final int T_RETURN          =   26;
-	static final int T_TRY             =   27;
-	static final int T_WHILE           =   28;
-	static final int T_YIELD           =   29;
-	static final int T_ID              =   30;
-	static final int T_NUMERO          =   31;
-	static final int T_ABRE_PARENTE    =   32;
-	static final int T_FECHA_PARENTE   =   33;	
-		
-	static final int T_FIM_FONTE       =  90;
-	static final int T_ERRO_LEX        =  98;
-	static final int T_NULO            =  99;
-	
-    static final int FIM_ARQUIVO       =  26;
+    static final int T_AND = 1;
+    static final int T_ASSERT = 2;
+    static final int T_BREAK = 3;
+    static final int T_CLASS = 4;
+    static final int T_CONTINUE = 5;
+    static final int T_DEF = 6;
+    static final int T_DEL = 7;
+    static final int T_ELIF = 8;
+    static final int T_ELSE = 9;
+    static final int T_EXCEPT = 10;
+    static final int T_EXEC = 11;
+    static final int T_FINALLY = 12;
+    static final int T_FOR = 13;
+    static final int T_FROM = 14;
+    static final int T_GLOBAL = 15;
+    static final int T_IF = 16;
+    static final int T_IMPORT = 17;
+    static final int T_IN = 18;
+    static final int T_IS = 19;
+    static final int T_LAMBDA = 20;
+    static final int T_NOT = 21;
+    static final int T_OR = 22;
+    static final int T_PASS = 23;
+    static final int T_PRINT = 24;
+    static final int T_RAISE = 25;
+    static final int T_RETURN = 26;
+    static final int T_TRY = 27;
+    static final int T_WHILE = 28;
+    static final int T_YIELD = 29;
+    static final int T_ID = 30;
+    static final int T_NUMERO = 31;
+    static final int T_ABRE_PARENTE = 32;
+    static final int T_FECHA_PARENTE = 33;
+
+    static final int T_FIM_FONTE = 90;
+    static final int T_ERRO_LEX = 98;
+    static final int T_NULO = 99;
+
+    static final int FIM_ARQUIVO = 26;
 
     static File arqFonte;
     static BufferedReader rdFonte;
     static File arqDestino;
 
-    static char   lookAhead;
-    static int    token;
+    static char lookAhead;
+    static int token;
     static String lexema;
-    static int    ponteiro;
+    static int ponteiro;
     static String linhaFonte;
-    static int    linhaAtual;
-    static int    colunaAtual;
+    static int linhaAtual;
+    static int colunaAtual;
     static String mensagemDeErro;
     static StringBuffer tokensIdentificados = new StringBuffer();
 
-  public static void main( String s[] ) throws java.io.IOException
-  {
-      try {
-    	  abreArquivo();
-    	  abreDestino();
-          linhaAtual     = 0;
-          colunaAtual    = 0;
-          ponteiro       = 0;
-          linhaFonte     = "";
-          token          = T_NULO;
-          mensagemDeErro = "";
+    public static void main(String s[]) throws java.io.IOException {
+        try {
+            abreArquivo();
+            abreDestino();
+            linhaAtual = 0;
+            colunaAtual = 0;
+            ponteiro = 0;
+            linhaFonte = "";
+            token = T_NULO;
+            mensagemDeErro = "";
 
-          movelookAhead();
+            movelookAhead();
 
-          while ( ( token != T_FIM_FONTE ) && ( token != T_ERRO_LEX ) ) {
-                  buscaProximoToken();
-                  mostraToken();
-          }
-          
-          if ( token == T_ERRO_LEX ) {
-              JOptionPane.showMessageDialog( null, mensagemDeErro, "Erro Léxico!", JOptionPane.ERROR_MESSAGE );
-          } else {
-              JOptionPane.showMessageDialog( null, "Análise Léxica terminada sem erros léxicos", "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE );
-          }
+            while ((token != T_FIM_FONTE) && (token != T_ERRO_LEX)) {
+                buscaProximoToken();
+                mostraToken();
+            }
 
-          exibeTokens();
-          
-          gravaSaida( arqDestino );
-          
-          fechaFonte();
+            if (token == T_ERRO_LEX) {
+                JOptionPane.showMessageDialog(null, mensagemDeErro, "Erro LÃ©xico!", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "AnÃ¡lise LÃ©xica terminada sem erros lÃ©xicos",
+                        "AnÃ¡lise LÃ©xica terminada!", JOptionPane.INFORMATION_MESSAGE);
+            }
 
-      } catch( FileNotFoundException fnfe ) {
-          JOptionPane.showMessageDialog( null, "Arquivo nao existe!", "FileNotFoundException!", JOptionPane.ERROR_MESSAGE );
-      } catch( UnsupportedEncodingException uee ) {
-          JOptionPane.showMessageDialog( null, "Erro desconhecido", "UnsupportedEncodingException!", JOptionPane.ERROR_MESSAGE );
-      } catch( IOException ioe ) {
-          JOptionPane.showMessageDialog( null, "Erro de io: " + ioe.getMessage(), "IOException!", JOptionPane.ERROR_MESSAGE );
-      } finally {
-          System.out.println( "Execucao terminada!" );
-      }
-  }
+            exibeTokens();
 
-  static void fechaFonte() throws IOException
-  {
-      rdFonte.close();
-  }
+            gravaSaida(arqDestino);
 
-  static void movelookAhead() throws IOException
-  {
-    if ( ( ponteiro + 1 ) > linhaFonte.length() ) {
-    	linhaAtual++;
-        ponteiro = 0;
-        if ( ( linhaFonte = rdFonte.readLine() ) == null ) {
-            lookAhead = FIM_ARQUIVO;
+            fechaFonte();
+
+        } catch (FileNotFoundException fnfe) {
+            JOptionPane.showMessageDialog(null, "Arquivo nao existe!", "FileNotFoundException!",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (UnsupportedEncodingException uee) {
+            JOptionPane.showMessageDialog(null, "Erro desconhecido", "UnsupportedEncodingException!",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ioe) {
+            JOptionPane.showMessageDialog(null, "Erro de io: " + ioe.getMessage(), "IOException!",
+                    JOptionPane.ERROR_MESSAGE);
+        } finally {
+            System.out.println("Execucao terminada!");
+        }
+    }
+
+    static void fechaFonte() throws IOException {
+        rdFonte.close();
+    }
+
+    static void movelookAhead() throws IOException {
+        if ((ponteiro + 1) > linhaFonte.length()) {
+            linhaAtual++;
+            ponteiro = 0;
+            if ((linhaFonte = rdFonte.readLine()) == null) {
+                lookAhead = FIM_ARQUIVO;
+            } else {
+                StringBuffer sbLinhaFonte = new StringBuffer(linhaFonte);
+                sbLinhaFonte.append('\13').append('\10');
+                linhaFonte = sbLinhaFonte.toString();
+
+                lookAhead = linhaFonte.charAt(ponteiro);
+            }
         } else {
-        	StringBuffer sbLinhaFonte = new StringBuffer( linhaFonte );
-        	sbLinhaFonte.append( '\13' ).append( '\10' );
-        	linhaFonte = sbLinhaFonte.toString();
-        	
-            lookAhead = linhaFonte.charAt( ponteiro );
+            lookAhead = linhaFonte.charAt(ponteiro);
         }
-    } else {
-        lookAhead = linhaFonte.charAt( ponteiro );
+
+        ponteiro++;
+        colunaAtual = ponteiro + 1;
     }
 
-    ponteiro++;
-    colunaAtual = ponteiro + 1;
-  }
+    static void buscaProximoToken() throws IOException {
+        int i, j;
 
-  static void buscaProximoToken() throws IOException
-  {
-	int i, j;
-        
-    StringBuffer sbLexema = new StringBuffer( "" );
+        StringBuffer sbLexema = new StringBuffer("");
 
-  	while ( ( lookAhead == 9 ) ||
-	        ( lookAhead == '\n' ) ||
-	        ( lookAhead == 8 ) ||
-	        ( lookAhead == 11 ) ||
-	        ( lookAhead == 12 ) ||
-	        ( lookAhead == '\r' ) ||
-	        ( lookAhead == 32 ) )
-    {
-        movelookAhead();
-    }
-
-    /*--------------------------------------------------------------*
-     * Caso o primeiro caracter seja alfabetico, procuro capturar a *
-     * sequencia de caracteres que se segue a ele e classifica-la   *
-     *--------------------------------------------------------------*/
-    if ( ( ( lookAhead >= 'A' ) && ( lookAhead <= 'Z' ) ) ||
-    	 ( ( lookAhead >= 'a' ) && ( lookAhead <= 'z' ) ) ) {
-    	
-        sbLexema.append( lookAhead );
-        movelookAhead();
-
-        while ( ( ( lookAhead >= 'a' ) && ( lookAhead <= 'z' ) ) ||
-        		( ( lookAhead >= 'A' ) && ( lookAhead <= 'Z' ) ) ||
-        		( ( lookAhead >= '0' ) && ( lookAhead <= '9' ) ) ||
-        		  ( lookAhead == '_' ))
-        {
-            sbLexema.append( lookAhead );
+        while ((lookAhead == 9) || (lookAhead == '\n') || (lookAhead == 8) || (lookAhead == 11) || (lookAhead == 12)
+                || (lookAhead == '\r') || (lookAhead == 32)) {
             movelookAhead();
         }
 
-        lexema = sbLexema.toString();  
+        /*--------------------------------------------------------------*
+         * Caso o primeiro caracter seja alfabetico, procuro capturar a *
+         * sequencia de caracteres que se segue a ele e classifica-la   *
+         *--------------------------------------------------------------*/
+        if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))) {
 
-        /* Classifico o meu token como palavra reservada ou id */
-        if ( lexema.equals( "and" ) )
-            token = T_AND;
-        else if ( lexema.equals( "assert" ) )
-            token = T_ASSERT;
-        else if ( lexema.equals( "break" ) )
-            token = T_BREAK;
-        else if ( lexema.equals( "class" ) )
-            token = T_CLASS;
-        else if ( lexema.equals( "continue" ) )
-            token = T_CONTINUE;
-        else if ( lexema.equals( "def" ) )
-            token = T_DEF;
-        else if ( lexema.equals( "del" ) )
-            token = T_DEL;
-        else if ( lexema.equals( "elif" ) )
-            token = T_ELIF;
-        else if ( lexema.equals( "else" ) )
-            token = T_ELSE;
-        else if ( lexema.equals( "except" ) )
-            token = T_EXCEPT;
-        else if ( lexema.equals( "exec" ) )
-            token = T_EXEC;
-        else if ( lexema.equals( "finally" ) )
-            token = T_FINALLY;
-        else if ( lexema.equals( "for" ) )
-            token = T_FOR;
-        else if ( lexema.equals( "from" ) )
-            token = T_FROM;
-        else if ( lexema.equals( "global" ) )
-            token = T_GLOBAL;
-        else if ( lexema.equals( "if" ) )
-            token = T_IF;
-        else if ( lexema.equals( "import" ) )
-            token = T_IMPORT;
-        else if ( lexema.equals( "in" ) )
-            token = T_IN;
-        else if ( lexema.equals( "is" ) )
-            token = T_IS;
-        else if ( lexema.equals( "lambda" ) )
-            token = T_LAMBDA;
-        else if ( lexema.equals( "not" ) )
-            token = T_NOT;
-        else if ( lexema.equals( "or" ) )
-            token = T_OR;
-        else if ( lexema.equals( "pass" ) )
-            token = T_PASS;
-        else if ( lexema.equals( "print" ) )
-            token = T_PRINT;
-        else if ( lexema.equals( "raise" ) )
-            token = T_RAISE;
-        else if ( lexema.equals( "return" ) )
-            token = T_RETURN;
-        else if ( lexema.equals( "try" ) )
-            token = T_TRY;
-        else if ( lexema.equals( "while" ) )
-            token = T_WHILE;
-        else if ( lexema.equals( "yield" ) )
-            token = T_YIELD;
-        else {
-            token = T_ID;
-        }
-    }
-    else if ( ( lookAhead >= '0' ) && ( lookAhead <= '9' ) ) {
-        sbLexema.append( lookAhead );
-        movelookAhead();
-        while ( ( lookAhead >= '0' ) && ( lookAhead <= '9' ) )
-        {
-            sbLexema.append( lookAhead );
+            sbLexema.append(lookAhead);
             movelookAhead();
-        }
-        if ( lookAhead == '.' ) {
-            sbLexema.append( lookAhead );
-            movelookAhead();
-            while ( ( lookAhead >= '0' ) && ( lookAhead <= '9' ) )
-            {
-                sbLexema.append( lookAhead );
+
+            while (((lookAhead >= 'a') && (lookAhead <= 'z')) || ((lookAhead >= 'A') && (lookAhead <= 'Z'))
+                    || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_')) {
+                sbLexema.append(lookAhead);
                 movelookAhead();
-            }            
+            }
+
+            lexema = sbLexema.toString();
+
+            /* Classifico o meu token como palavra reservada ou id */
+            if (lexema.equals("and"))
+                token = T_AND;
+            else if (lexema.equals("assert"))
+                token = T_ASSERT;
+            else if (lexema.equals("break"))
+                token = T_BREAK;
+            else if (lexema.equals("class"))
+                token = T_CLASS;
+            else if (lexema.equals("continue"))
+                token = T_CONTINUE;
+            else if (lexema.equals("def"))
+                token = T_DEF;
+            else if (lexema.equals("del"))
+                token = T_DEL;
+            else if (lexema.equals("elif"))
+                token = T_ELIF;
+            else if (lexema.equals("else"))
+                token = T_ELSE;
+            else if (lexema.equals("except"))
+                token = T_EXCEPT;
+            else if (lexema.equals("exec"))
+                token = T_EXEC;
+            else if (lexema.equals("finally"))
+                token = T_FINALLY;
+            else if (lexema.equals("for"))
+                token = T_FOR;
+            else if (lexema.equals("from"))
+                token = T_FROM;
+            else if (lexema.equals("global"))
+                token = T_GLOBAL;
+            else if (lexema.equals("if"))
+                token = T_IF;
+            else if (lexema.equals("import"))
+                token = T_IMPORT;
+            else if (lexema.equals("in"))
+                token = T_IN;
+            else if (lexema.equals("is"))
+                token = T_IS;
+            else if (lexema.equals("lambda"))
+                token = T_LAMBDA;
+            else if (lexema.equals("not"))
+                token = T_NOT;
+            else if (lexema.equals("or"))
+                token = T_OR;
+            else if (lexema.equals("pass"))
+                token = T_PASS;
+            else if (lexema.equals("print"))
+                token = T_PRINT;
+            else if (lexema.equals("raise"))
+                token = T_RAISE;
+            else if (lexema.equals("return"))
+                token = T_RETURN;
+            else if (lexema.equals("try"))
+                token = T_TRY;
+            else if (lexema.equals("while"))
+                token = T_WHILE;
+            else if (lexema.equals("yield"))
+                token = T_YIELD;
+            else {
+                token = T_ID;
+            }
+        } else if ((lookAhead >= '0') && (lookAhead <= '9')) {
+            sbLexema.append(lookAhead);
+            movelookAhead();
+            while ((lookAhead >= '0') && (lookAhead <= '9')) {
+                sbLexema.append(lookAhead);
+                movelookAhead();
+            }
+            if (lookAhead == '.') {
+                sbLexema.append(lookAhead);
+                movelookAhead();
+                while ((lookAhead >= '0') && (lookAhead <= '9')) {
+                    sbLexema.append(lookAhead);
+                    movelookAhead();
+                }
+            }
+            token = T_NUMERO;
+        } else if (lookAhead == '(') {
+            sbLexema.append(lookAhead);
+            movelookAhead();
+            token = T_ABRE_PARENTE;
+        } else if (lookAhead == ')') {
+            sbLexema.append(lookAhead);
+            movelookAhead();
+            token = T_FECHA_PARENTE;
+        } else if (lookAhead == FIM_ARQUIVO) {
+            token = T_FIM_FONTE;
+        } else {
+            token = T_ERRO_LEX;
+            mensagemDeErro = "Erro LÃ©xico na linha: " + linhaAtual + "\nReconhecido ao atingir a coluna: " + colunaAtual
+                    + "\nLinha do Erro: <" + linhaFonte + ">\nToken desconhecido: " + lookAhead;
+            sbLexema.append(lookAhead);
         }
-        token = T_NUMERO;    
-    } else if ( lookAhead == '(' ){
-        sbLexema.append( lookAhead );
-        movelookAhead();
-        token = T_ABRE_PARENTE;
-    } else if ( lookAhead == ')' ){
-        sbLexema.append( lookAhead );
-        movelookAhead();
-        token = T_FECHA_PARENTE;
-    } else if ( lookAhead == FIM_ARQUIVO ){
-         token = T_FIM_FONTE;    	
-    } else {
-    	token = T_ERRO_LEX;
-    	mensagemDeErro = "Erro Léxico na linha: " + linhaAtual + "\nReconhecido ao atingir a coluna: " + colunaAtual + "\nLinha do Erro: <" + linhaFonte + ">\nToken desconhecido: " + lookAhead;
-    	sbLexema.append( lookAhead );
+
+        lexema = sbLexema.toString();
     }
-        
-    lexema = sbLexema.toString();  
-  }
-  
-  static void mostraToken()
-  {
 
-    StringBuffer tokenLexema = new StringBuffer( "" );
-	
-    switch ( token ) {
-        case T_AND   : tokenLexema.append( "T_AND" ); break;
-        case T_ASSERT   : tokenLexema.append( "T_ASSERT" ); break;
-        case T_BREAK   : tokenLexema.append( "T_BREAK" ); break;
-        case T_CLASS   : tokenLexema.append( "T_CLASS" ); break;
-        case T_CONTINUE   : tokenLexema.append( "T_CONTINUE" ); break;
-        case T_DEF   : tokenLexema.append( "T_DEF" ); break;
-        case T_DEL   : tokenLexema.append( "T_DEL" ); break;
-        case T_ELIF   : tokenLexema.append( "T_ELIF" ); break;
-        case T_ELSE   : tokenLexema.append( "T_ELSE" ); break;
-        case T_EXCEPT   : tokenLexema.append( "T_EXCEPT" ); break;
-        case T_EXEC   : tokenLexema.append( "T_EXEC" ); break;
-        case T_FINALLY   : tokenLexema.append( "T_FINALLY" ); break;
-        case T_FOR   : tokenLexema.append( "T_FOR" ); break;
-        case T_FROM   : tokenLexema.append( "T_FROM" ); break;
-        case T_GLOBAL   : tokenLexema.append( "T_GLOBAL" ); break;
-        case T_IF   : tokenLexema.append( "T_IF" ); break;
-        case T_IMPORT   : tokenLexema.append( "T_IMPORT" ); break;
-        case T_IN   : tokenLexema.append( "T_IN" ); break;
-        case T_IS   : tokenLexema.append( "T_IS" ); break;
-        case T_LAMBDA   : tokenLexema.append( "T_LAMBDA" ); break;
-        case T_NOT   : tokenLexema.append( "T_NOT" ); break;
-        case T_OR   : tokenLexema.append( "T_OR" ); break;
-        case T_PASS   : tokenLexema.append( "T_PASS" ); break;
-        case T_PRINT   : tokenLexema.append( "T_PRINT" ); break;
-        case T_RAISE   : tokenLexema.append( "T_RAISE" ); break;
-        case T_RETURN   : tokenLexema.append( "T_RETURN" ); break;
-        case T_TRY   : tokenLexema.append( "T_TRY" ); break;
-        case T_WHILE   : tokenLexema.append( "T_WHILE" ); break;
-        case T_YIELD   : tokenLexema.append( "T_YIELD" ); break;
-        case T_ID         : tokenLexema.append( "T_ID" ); break;
-        case T_ABRE_PARENTE         : tokenLexema.append( "T_ABRE_PARENTE" ); break;        
-        case T_FECHA_PARENTE         : tokenLexema.append( "T_FECHA_PARENTE" ); break;
-        case T_FIM_FONTE  : tokenLexema.append( "T_FIM_FONTE" ); break;
-        case T_ERRO_LEX   : tokenLexema.append( "T_ERRO_LEX" ); break;
-        case T_NULO       : tokenLexema.append( "T_NULO" ); break;
-        default           : tokenLexema.append( "N/A" ); break;
+    static void mostraToken() {
+
+        StringBuffer tokenLexema = new StringBuffer("");
+
+        switch (token) {
+        case T_AND:
+            tokenLexema.append("T_AND");
+            break;
+        case T_ASSERT:
+            tokenLexema.append("T_ASSERT");
+            break;
+        case T_BREAK:
+            tokenLexema.append("T_BREAK");
+            break;
+        case T_CLASS:
+            tokenLexema.append("T_CLASS");
+            break;
+        case T_CONTINUE:
+            tokenLexema.append("T_CONTINUE");
+            break;
+        case T_DEF:
+            tokenLexema.append("T_DEF");
+            break;
+        case T_DEL:
+            tokenLexema.append("T_DEL");
+            break;
+        case T_ELIF:
+            tokenLexema.append("T_ELIF");
+            break;
+        case T_ELSE:
+            tokenLexema.append("T_ELSE");
+            break;
+        case T_EXCEPT:
+            tokenLexema.append("T_EXCEPT");
+            break;
+        case T_EXEC:
+            tokenLexema.append("T_EXEC");
+            break;
+        case T_FINALLY:
+            tokenLexema.append("T_FINALLY");
+            break;
+        case T_FOR:
+            tokenLexema.append("T_FOR");
+            break;
+        case T_FROM:
+            tokenLexema.append("T_FROM");
+            break;
+        case T_GLOBAL:
+            tokenLexema.append("T_GLOBAL");
+            break;
+        case T_IF:
+            tokenLexema.append("T_IF");
+            break;
+        case T_IMPORT:
+            tokenLexema.append("T_IMPORT");
+            break;
+        case T_IN:
+            tokenLexema.append("T_IN");
+            break;
+        case T_IS:
+            tokenLexema.append("T_IS");
+            break;
+        case T_LAMBDA:
+            tokenLexema.append("T_LAMBDA");
+            break;
+        case T_NOT:
+            tokenLexema.append("T_NOT");
+            break;
+        case T_OR:
+            tokenLexema.append("T_OR");
+            break;
+        case T_PASS:
+            tokenLexema.append("T_PASS");
+            break;
+        case T_PRINT:
+            tokenLexema.append("T_PRINT");
+            break;
+        case T_RAISE:
+            tokenLexema.append("T_RAISE");
+            break;
+        case T_RETURN:
+            tokenLexema.append("T_RETURN");
+            break;
+        case T_TRY:
+            tokenLexema.append("T_TRY");
+            break;
+        case T_WHILE:
+            tokenLexema.append("T_WHILE");
+            break;
+        case T_YIELD:
+            tokenLexema.append("T_YIELD");
+            break;
+        case T_ID:
+            tokenLexema.append("T_ID");
+            break;
+        case T_ABRE_PARENTE:
+            tokenLexema.append("T_ABRE_PARENTE");
+            break;
+        case T_FECHA_PARENTE:
+            tokenLexema.append("T_FECHA_PARENTE");
+            break;
+        case T_FIM_FONTE:
+            tokenLexema.append("T_FIM_FONTE");
+            break;
+        case T_ERRO_LEX:
+            tokenLexema.append("T_ERRO_LEX");
+            break;
+        case T_NULO:
+            tokenLexema.append("T_NULO");
+            break;
+        default:
+            tokenLexema.append("N/A");
+            break;
+        }
+        System.out.println(tokenLexema.toString() + " ( " + lexema + " )");
+        acumulaToken(tokenLexema.toString() + " ( " + lexema + " )");
+        tokenLexema.append(lexema);
     }
-    System.out.println( tokenLexema.toString() + " ( " + lexema + " )" );
-    acumulaToken( tokenLexema.toString() + " ( " + lexema + " )" );
-    tokenLexema.append( lexema );
-  }
 
-  private static void abreArquivo() {
+    private static void abreArquivo() {
 
-		JFileChooser fileChooser = new JFileChooser();
-		
-		fileChooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
+        JFileChooser fileChooser = new JFileChooser();
 
-		FiltroMe filtro = new FiltroMe();
-	    
-		fileChooser.addChoosableFileFilter( filtro );
-		int result = fileChooser.showOpenDialog( null );
-		
-		if( result == JFileChooser.CANCEL_OPTION ) {
-			return;
-		}
-		
-		arqFonte = fileChooser.getSelectedFile();
-		abreFonte( arqFonte ); 	
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-	}
+        FiltroMe filtro = new FiltroMe();
 
+        fileChooser.addChoosableFileFilter(filtro);
+        int result = fileChooser.showOpenDialog(null);
 
-	private static boolean abreFonte( File fileName ) {
+        if (result == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
 
-		if( arqFonte == null || fileName.getName().trim().equals( "" ) ) {
-			JOptionPane.showMessageDialog( null, "Nome de Arquivo Inválido", "Nome de Arquivo Inválido", JOptionPane.ERROR_MESSAGE );
-			return false;
-		} else {
-			linhaAtual = 1;
-	        try {
-				FileReader fr = new FileReader( arqFonte );
-				rdFonte = new BufferedReader( fr );
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			return true;
-		}
-	}
+        arqFonte = fileChooser.getSelectedFile();
+        abreFonte(arqFonte);
 
-	private static void abreDestino() {
+    }
 
-		JFileChooser fileChooser = new JFileChooser();
-			
-		fileChooser.setFileSelectionMode( JFileChooser.FILES_ONLY );
+    private static boolean abreFonte(File fileName) {
 
-		FiltroMe filtro = new FiltroMe();
-		    
-		fileChooser.addChoosableFileFilter( filtro );
-		int result = fileChooser.showSaveDialog( null );
-			
-		if( result == JFileChooser.CANCEL_OPTION ) {
-			return;
-		}
-			
-		arqDestino = fileChooser.getSelectedFile();
-	}	
-	
+        if (arqFonte == null || fileName.getName().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Nome de Arquivo InvÃ¡lido", "Nome de Arquivo InvÃ¡lido",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            linhaAtual = 1;
+            try {
+                FileReader fr = new FileReader(arqFonte);
+                rdFonte = new BufferedReader(fr);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return true;
+        }
+    }
 
-	private static boolean gravaSaida( File fileName ) {
+    private static void abreDestino() {
 
-		if( arqDestino == null || fileName.getName().trim().equals( "" ) ) {
-			JOptionPane.showMessageDialog( null, "Nome de Arquivo Inválido", "Nome de Arquivo Inválido", JOptionPane.ERROR_MESSAGE );
-			return false;
-		} else {
-			FileWriter fw;
-			try {
-				System.out.println( arqDestino.toString() );
-				System.out.println( tokensIdentificados.toString() );
-				fw = new FileWriter( arqDestino );
-				BufferedWriter bfw = new BufferedWriter( fw ); 
-				bfw.write( tokensIdentificados.toString() );
-				bfw.close();
-				JOptionPane.showMessageDialog( null, "Arquivo Salvo: " + arqDestino, "Salvando Arquivo", JOptionPane.INFORMATION_MESSAGE );
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog( null, e.getMessage(), "Erro de Entrada/Saída", JOptionPane.ERROR_MESSAGE );
-			} 
-			return true;
-		}
-	}
-	
-	public static void exibeTokens() {
-		
-		JTextArea texto = new JTextArea();
-		texto.append( tokensIdentificados.toString() );
-		JOptionPane.showMessageDialog(null, texto, "Tokens Identificados (token/lexema)", JOptionPane.INFORMATION_MESSAGE );
-	}
-	
-	public static void acumulaToken( String tokenIdentificado ) {
+        JFileChooser fileChooser = new JFileChooser();
 
-		tokensIdentificados.append( tokenIdentificado );
-		tokensIdentificados.append( "\n" );
-		
-	}
-		
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        FiltroMe filtro = new FiltroMe();
+
+        fileChooser.addChoosableFileFilter(filtro);
+        int result = fileChooser.showSaveDialog(null);
+
+        if (result == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
+
+        arqDestino = fileChooser.getSelectedFile();
+    }
+
+    private static boolean gravaSaida(File fileName) {
+
+        if (arqDestino == null || fileName.getName().trim().equals("")) {
+            JOptionPane.showMessageDialog(null, "Nome de Arquivo InvÃ¡lido", "Nome de Arquivo InvÃ¡lido",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        } else {
+            FileWriter fw;
+            try {
+                System.out.println(arqDestino.toString());
+                System.out.println(tokensIdentificados.toString());
+                fw = new FileWriter(arqDestino);
+                BufferedWriter bfw = new BufferedWriter(fw);
+                bfw.write(tokensIdentificados.toString());
+                bfw.close();
+                JOptionPane.showMessageDialog(null, "Arquivo Salvo: " + arqDestino, "Salvando Arquivo",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Erro de Entrada/SaÃ­da", JOptionPane.ERROR_MESSAGE);
+            }
+            return true;
+        }
+    }
+
+    public static void exibeTokens() {
+
+        JTextArea texto = new JTextArea();
+        texto.append(tokensIdentificados.toString());
+        JOptionPane.showMessageDialog(null, texto, "Tokens Identificados (token/lexema)",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void acumulaToken(String tokenIdentificado) {
+
+        tokensIdentificados.append(tokenIdentificado);
+        tokensIdentificados.append("\n");
+
+    }
+
 }
 
 /**
- * Classe Interna para criação de filtro de seleção
+ * Classe Interna para criaÃ§Ã£o de filtro de seleÃ§Ã£o
  */
 class FiltroMe extends FileFilter {
 
-	public boolean accept(File arg0) {
-	   	 if(arg0 != null) {
-	         if(arg0.isDirectory()) {
-	       	  return true;
-	         }
-	         if( getExtensao(arg0) != null) {
-	        	 if ( getExtensao(arg0).equalsIgnoreCase( "py" ) ) {
-		        	 return true;
-	        	 }
-	         };
-	   	 }
-	     return false;
-	}
+    public boolean accept(File arg0) {
+        if (arg0 != null) {
+            if (arg0.isDirectory()) {
+                return true;
+            }
+            if (getExtensao(arg0) != null) {
+                if (getExtensao(arg0).equalsIgnoreCase("py")) {
+                    return true;
+                }
+            }
+            ;
+        }
+        return false;
+    }
 
-	/**
-	 * Retorna quais extensões poderão ser escolhidas
-	 */
-	public String getDescription() {
-		return "*.py";
-	}
-	
-	/**
-	 * Retorna a parte com a extensão de um arquivo
-	 */
-	public String getExtensao(File arq) {
-	if(arq != null) {
-		String filename = arq.getName();
-	    int i = filename.lastIndexOf('.');
-	    if(i>0 && i<filename.length()-1) {
-	    	return filename.substring(i+1).toLowerCase();
-	    };
-	}
-		return null;
-	}
+    /**
+     * Retorna quais extensÃµes poderÃ£o ser escolhidas
+     */
+    public String getDescription() {
+        return "*.py";
+    }
+
+    /**
+     * Retorna a parte com a extensÃ£o de um arquivo
+     */
+    public String getExtensao(File arq) {
+        if (arq != null) {
+            String filename = arq.getName();
+            int i = filename.lastIndexOf('.');
+            if (i > 0 && i < filename.length() - 1) {
+                return filename.substring(i + 1).toLowerCase();
+            }
+            ;
+        }
+        return null;
+    }
 }
