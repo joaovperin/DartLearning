@@ -85,7 +85,7 @@ public class Lexico {
     public static void main(String s[]) throws java.io.IOException {
         try {
             abreArquivo();
-            //abreDestino();
+            // abreDestino();
             linhaAtual = 0;
             colunaAtual = 0;
             ponteiro = 0;
@@ -101,9 +101,11 @@ public class Lexico {
             }
 
             if (token == T_ERRO_LEX) {
-                //JOptionPane.showMessageDialog(null, mensagemDeErro, "Erro Léxico!", JOptionPane.ERROR_MESSAGE);
+                // JOptionPane.showMessageDialog(null, mensagemDeErro, "Erro Léxico!",
+                // JOptionPane.ERROR_MESSAGE);
             } else {
-                //JOptionPane.showMessageDialog(null, "Análise Léxica terminada sem erros léxicos", "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE);
+                // JOptionPane.showMessageDialog(null, "Análise Léxica terminada sem erros
+                // léxicos", "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             exibeTokens();
@@ -165,13 +167,16 @@ public class Lexico {
          * Caso o primeiro caracter seja alfabetico, procuro capturar a *
          * sequencia de caracteres que se segue a ele e classifica-la   *
          *--------------------------------------------------------------*/
-        if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))) {
+        if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))
+        || (lookAhead == '+')
+                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')) {
 
             sbLexema.append(lookAhead);
             movelookAhead();
 
             while (((lookAhead >= 'a') && (lookAhead <= 'z')) || ((lookAhead >= 'A') && (lookAhead <= 'Z'))
-                    || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_')) {
+                    || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_') || (lookAhead == '+')
+                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')) {
                 sbLexema.append(lookAhead);
                 movelookAhead();
             }
@@ -237,6 +242,16 @@ public class Lexico {
                 token = T_WHILE;
             else if (lexema.equals("yield"))
                 token = T_YIELD;
+            else if (lexema.equals("+"))
+                token = T_SYMBOL_PLUS;
+            else if (lexema.equals("-"))
+                token = T_SYMBOL_MINUS;
+            else if (lexema.equals("*"))
+                token = T_SYMBOL_MULTIPLY;
+            else if (lexema.equals("/"))
+                token = T_SYMBOL_DIVIDE;
+            else if (lexema.equals(":"))
+                token = T_SYMBOL_TWO_POINTS;
             else {
                 token = T_ID;
             }
@@ -427,10 +442,10 @@ public class Lexico {
         // int result = fileChooser.showOpenDialog(null);
 
         // if (result == JFileChooser.CANCEL_OPTION) {
-        //     return;
+        // return;
         // }
 
-        //arqFonte = fileChooser.getSelectedFile();
+        // arqFonte = fileChooser.getSelectedFile();
         arqFonte = new File(inputDirectory + "/input.py");
         abreFonte(arqFonte);
 
@@ -503,7 +518,8 @@ public class Lexico {
 
         JTextArea texto = new JTextArea();
         texto.append(tokensIdentificados.toString());
-        //JOptionPane.showMessageDialog(null, texto, "Tokens Identificados (token/lexema)", JOptionPane.INFORMATION_MESSAGE);
+        // JOptionPane.showMessageDialog(null, texto, "Tokens Identificados
+        // (token/lexema)", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void acumulaToken(String tokenIdentificado) {

@@ -1,3 +1,3 @@
 print ( 12 )
-print ( 2 + 3 )
-
+if aaa:
+    print ( 2 + 3 )
