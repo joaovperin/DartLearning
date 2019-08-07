@@ -56,6 +56,12 @@ public class Lexico {
     static final int T_ABRE_PARENTE = 32;
     static final int T_FECHA_PARENTE = 33;
 
+    static final int T_SYMBOL_PLUS = 34;
+    static final int T_SYMBOL_MINUS = 35;
+    static final int T_SYMBOL_MULTIPLY = 36;
+    static final int T_SYMBOL_DIVIDE = 37;
+    static final int T_SYMBOL_TWO_POINTS = 38;
+
     static final int T_FIM_FONTE = 90;
     static final int T_ERRO_LEX = 98;
     static final int T_NULO = 99;
@@ -79,7 +85,7 @@ public class Lexico {
     public static void main(String s[]) throws java.io.IOException {
         try {
             abreArquivo();
-            abreDestino();
+            //abreDestino();
             linhaAtual = 0;
             colunaAtual = 0;
             ponteiro = 0;
@@ -95,10 +101,9 @@ public class Lexico {
             }
 
             if (token == T_ERRO_LEX) {
-                JOptionPane.showMessageDialog(null, mensagemDeErro, "Erro Léxico!", JOptionPane.ERROR_MESSAGE);
+                //JOptionPane.showMessageDialog(null, mensagemDeErro, "Erro Léxico!", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Análise Léxica terminada sem erros léxicos",
-                        "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE);
+                //JOptionPane.showMessageDialog(null, "Análise Léxica terminada sem erros léxicos", "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE);
             }
 
             exibeTokens();
@@ -381,6 +386,24 @@ public class Lexico {
         case T_NULO:
             tokenLexema.append("T_NULO");
             break;
+        case T_NUMERO:
+            tokenLexema.append("T_NUMERO");
+            break;
+        case T_SYMBOL_PLUS:
+            tokenLexema.append("T_SYMBOL_PLUS");
+            break;
+        case T_SYMBOL_MINUS:
+            tokenLexema.append("T_SYMBOL_MINUS");
+            break;
+        case T_SYMBOL_MULTIPLY:
+            tokenLexema.append("T_SYMBOL_MULTIPLY");
+            break;
+        case T_SYMBOL_DIVIDE:
+            tokenLexema.append("T_SYMBOL_DIVIDE");
+            break;
+        case T_SYMBOL_TWO_POINTS:
+            tokenLexema.append("T_SYMBOL_TWO_POINTS");
+            break;
         default:
             tokenLexema.append("N/A");
             break;
@@ -392,20 +415,23 @@ public class Lexico {
 
     private static void abreArquivo() {
 
-        JFileChooser fileChooser = new JFileChooser();
+        final String inputDirectory = "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
+        // JFileChooser fileChooser = new JFileChooser();
+        // fileChooser.setCurrentDirectory(new File(inputDirectory));
 
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        // fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        FiltroMe filtro = new FiltroMe();
+        // FiltroMe filtro = new FiltroMe();
 
-        fileChooser.addChoosableFileFilter(filtro);
-        int result = fileChooser.showOpenDialog(null);
+        // fileChooser.addChoosableFileFilter(filtro);
+        // int result = fileChooser.showOpenDialog(null);
 
-        if (result == JFileChooser.CANCEL_OPTION) {
-            return;
-        }
+        // if (result == JFileChooser.CANCEL_OPTION) {
+        //     return;
+        // }
 
-        arqFonte = fileChooser.getSelectedFile();
+        //arqFonte = fileChooser.getSelectedFile();
+        arqFonte = new File(inputDirectory + "/input.py");
         abreFonte(arqFonte);
 
     }
@@ -432,6 +458,8 @@ public class Lexico {
     private static void abreDestino() {
 
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(
+                "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806"));
 
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -450,8 +478,8 @@ public class Lexico {
     private static boolean gravaSaida(File fileName) {
 
         if (arqDestino == null || fileName.getName().trim().equals("")) {
-            JOptionPane.showMessageDialog(null, "Nome de Arquivo Inválido", "Nome de Arquivo Inválido",
-                    JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Nome de Arquivo Inválido", "Nome de
+            // Arquivo Inválido",JOptionPane.ERROR_MESSAGE);
             return false;
         } else {
             FileWriter fw;
@@ -475,8 +503,7 @@ public class Lexico {
 
         JTextArea texto = new JTextArea();
         texto.append(tokensIdentificados.toString());
-        JOptionPane.showMessageDialog(null, texto, "Tokens Identificados (token/lexema)",
-                JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, texto, "Tokens Identificados (token/lexema)", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public static void acumulaToken(String tokenIdentificado) {
