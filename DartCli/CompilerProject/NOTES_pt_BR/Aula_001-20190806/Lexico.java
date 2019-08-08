@@ -62,6 +62,14 @@ public class Lexico {
     static final int T_SYMBOL_DIVIDE = 37;
     static final int T_SYMBOL_TWO_POINTS = 38;
 
+    static final int T_SYMBOL_EQUAL = 39;
+    static final int T_SYMBOL_LT = 40;
+    static final int T_SYMBOL_LTE = 41;
+    static final int T_SYMBOL_GT = 42;
+    static final int T_SYMBOL_GTE = 43;
+    static final int T_SYMBOL_UNEQUAL = 44;
+
+
     static final int T_FIM_FONTE = 90;
     static final int T_ERRO_LEX = 98;
     static final int T_NULO = 99;
