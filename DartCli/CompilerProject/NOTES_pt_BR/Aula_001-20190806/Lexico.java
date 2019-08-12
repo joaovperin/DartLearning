@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileFilter;
 
 /**
  * Lexico - Classe para implementação de um analisador Léxico básico
- * 
+ *
  * @author Ricardo Ferreira de Oliveira
  * @author turma de compiladores de 1/2019
  *
@@ -68,7 +68,6 @@ public class Lexico {
     static final int T_SYMBOL_GT = 42;
     static final int T_SYMBOL_GTE = 43;
     static final int T_SYMBOL_UNEQUAL = 44;
-
 
     static final int T_FIM_FONTE = 90;
     static final int T_ERRO_LEX = 98;
@@ -176,15 +175,17 @@ public class Lexico {
          * sequencia de caracteres que se segue a ele e classifica-la   *
          *--------------------------------------------------------------*/
         if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))
-        || (lookAhead == '+')
-                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')) {
+                || (lookAhead == '+') || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/')
+                || (lookAhead == ':') || (lookAhead == '=') || (lookAhead == '!') || (lookAhead == '>')
+                || (lookAhead == '<')) {
 
             sbLexema.append(lookAhead);
             movelookAhead();
 
             while (((lookAhead >= 'a') && (lookAhead <= 'z')) || ((lookAhead >= 'A') && (lookAhead <= 'Z'))
                     || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_') || (lookAhead == '+')
-                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')) {
+                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')
+                    || (lookAhead == '=') || (lookAhead == '!') || (lookAhead == '>') || (lookAhead == '<')) {
                 sbLexema.append(lookAhead);
                 movelookAhead();
             }
@@ -260,6 +261,19 @@ public class Lexico {
                 token = T_SYMBOL_DIVIDE;
             else if (lexema.equals(":"))
                 token = T_SYMBOL_TWO_POINTS;
+
+            else if (lexema.equals(">"))
+                token = T_SYMBOL_GT;
+            else if (lexema.equals(">="))
+                token = T_SYMBOL_GTE;
+            else if (lexema.equals("<"))
+                token = T_SYMBOL_LT;
+            else if (lexema.equals("<="))
+                token = T_SYMBOL_LTE;
+            else if (lexema.equals("=="))
+                token = T_SYMBOL_EQUAL;
+            else if (lexema.equals("!="))
+                token = T_SYMBOL_UNEQUAL;
             else {
                 token = T_ID;
             }
@@ -427,6 +441,24 @@ public class Lexico {
         case T_SYMBOL_TWO_POINTS:
             tokenLexema.append("T_SYMBOL_TWO_POINTS");
             break;
+        case T_SYMBOL_UNEQUAL:
+            tokenLexema.append("T_SYMBOL_UNEQUAL");
+            break;
+        case T_SYMBOL_EQUAL:
+            tokenLexema.append("T_SYMBOL_EQUAL");
+            break;
+        case T_SYMBOL_GT:
+            tokenLexema.append("T_SYMBOL_GT");
+            break;
+        case T_SYMBOL_GTE:
+            tokenLexema.append("T_SYMBOL_GTE");
+            break;
+        case T_SYMBOL_LT:
+            tokenLexema.append("T_SYMBOL_LT");
+            break;
+        case T_SYMBOL_LTE:
+            tokenLexema.append("T_SYMBOL_LTE");
+            break;
         default:
             tokenLexema.append("N/A");
             break;
@@ -438,7 +470,8 @@ public class Lexico {
 
     private static void abreArquivo() {
 
-        final String inputDirectory = "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
+        final String inputDirectory = "C:/fontes/dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
+        // final String inputDirectory = "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
         // JFileChooser fileChooser = new JFileChooser();
         // fileChooser.setCurrentDirectory(new File(inputDirectory));
 
