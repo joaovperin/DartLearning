@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -69,8 +73,6 @@ public class Lexico {
     static final int T_SYMBOL_GTE = 43;
     static final int T_SYMBOL_UNEQUAL = 44;
 
-    static final int T_SYMBOL_ATTRIBUTION = 45;
-
     static final int T_FIM_FONTE = 90;
     static final int T_ERRO_LEX = 98;
     static final int T_NULO = 99;
@@ -89,7 +91,7 @@ public class Lexico {
     static int linhaAtual;
     static int colunaAtual;
     static String mensagemDeErro;
-    static StringBuffer tokensIdentificados = new StringBuffer();
+    static StringBuilder tokensIdentificados = new StringBuilder();
 
     public static void main(String s[]) throws java.io.IOException {
         try {
@@ -176,13 +178,18 @@ public class Lexico {
          * Caso o primeiro caracter seja alfabetico, procuro capturar a *
          * sequencia de caracteres que se segue a ele e classifica-la   *
          *--------------------------------------------------------------*/
-        if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))) {
+        if (((lookAhead >= 'A') && (lookAhead <= 'Z')) || ((lookAhead >= 'a') && (lookAhead <= 'z'))
+                || (lookAhead == '+') || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/')
+                || (lookAhead == ':') || (lookAhead == '=') || (lookAhead == '!') || (lookAhead == '>')
+                || (lookAhead == '<')) {
 
             sbLexema.append(lookAhead);
             movelookAhead();
 
             while (((lookAhead >= 'a') && (lookAhead <= 'z')) || ((lookAhead >= 'A') && (lookAhead <= 'Z'))
-                    || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_')) {
+                    || ((lookAhead >= '0') && (lookAhead <= '9')) || (lookAhead == '_') || (lookAhead == '+')
+                    || (lookAhead == '-') || (lookAhead == '*') || (lookAhead == '/') || (lookAhead == ':')
+                    || (lookAhead == '=') || (lookAhead == '!') || (lookAhead == '>') || (lookAhead == '<')) {
                 sbLexema.append(lookAhead);
                 movelookAhead();
             }
@@ -248,6 +255,29 @@ public class Lexico {
                 token = T_WHILE;
             else if (lexema.equals("yield"))
                 token = T_YIELD;
+            else if (lexema.equals("+"))
+                token = T_SYMBOL_PLUS;
+            else if (lexema.equals("-"))
+                token = T_SYMBOL_MINUS;
+            else if (lexema.equals("*"))
+                token = T_SYMBOL_MULTIPLY;
+            else if (lexema.equals("/"))
+                token = T_SYMBOL_DIVIDE;
+            else if (lexema.equals(":"))
+                token = T_SYMBOL_TWO_POINTS;
+
+            else if (lexema.equals(">"))
+                token = T_SYMBOL_GT;
+            else if (lexema.equals(">="))
+                token = T_SYMBOL_GTE;
+            else if (lexema.equals("<"))
+                token = T_SYMBOL_LT;
+            else if (lexema.equals("<="))
+                token = T_SYMBOL_LTE;
+            else if (lexema.equals("=="))
+                token = T_SYMBOL_EQUAL;
+            else if (lexema.equals("!="))
+                token = T_SYMBOL_UNEQUAL;
             else {
                 token = T_ID;
             }
@@ -275,58 +305,6 @@ public class Lexico {
             sbLexema.append(lookAhead);
             movelookAhead();
             token = T_FECHA_PARENTE;
-        } else if (lookAhead == '+') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            token = T_SYMBOL_PLUS;
-        } else if (lookAhead == '-') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            token = T_SYMBOL_MINUS;
-        } else if (lookAhead == '*') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            token = T_SYMBOL_MULTIPLY;
-        } else if (lookAhead == '/') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            token = T_SYMBOL_DIVIDE;
-        } else if (lookAhead == ':') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            token = T_SYMBOL_TWO_POINTS;
-        } else if (lookAhead == '>') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            if (lookAhead == '=') {
-                token = T_SYMBOL_GTE;
-            } else {
-                token = T_SYMBOL_GT;
-            }
-            sbLexema.append(lookAhead);
-            movelookAhead();
-        } else if (lookAhead == '<') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            if (lookAhead == '=') {
-                token = T_SYMBOL_LTE;
-            } else if (lookAhead == '>') {
-                token = T_SYMBOL_UNEQUAL;
-            } else {
-                token = T_SYMBOL_LT;
-            }
-            sbLexema.append(lookAhead);
-            movelookAhead();
-        } else if (lookAhead == '=') {
-            sbLexema.append(lookAhead);
-            movelookAhead();
-            if (lookAhead == '=') {
-                token = T_SYMBOL_EQUAL;
-            } else {
-                token = T_SYMBOL_ATTRIBUTION;
-            }
-            sbLexema.append(lookAhead);
-            movelookAhead();
         } else if (lookAhead == FIM_ARQUIVO) {
             token = T_FIM_FONTE;
         } else {
@@ -342,6 +320,20 @@ public class Lexico {
     static void mostraToken() {
 
         StringBuffer tokenLexema = new StringBuffer("");
+        Pattern ptTokenFields = Pattern.compile("T_.+");
+
+        Field[] fields = Lexico.class.getDeclaredFields();
+        Map<String, Integer> staticFields = new ArrayList<>();
+        for (Field field : declaredFields) {
+            String fieldName = field.getName();
+            if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) && ptTokenFields.matcher(fieldName).find()) {
+                staticFields.put(fieldName, Integer.valueOf(field.getInt(Lexico.class)));
+            }
+        }
+
+        if (staticFields.containsValue(token)) {
+            //tokenLexema.append(staticFields.get(tok));
+        }
 
         switch (token) {
         case T_AND:
@@ -485,9 +477,6 @@ public class Lexico {
         case T_SYMBOL_LTE:
             tokenLexema.append("T_SYMBOL_LTE");
             break;
-        case T_SYMBOL_ATTRIBUTION:
-            tokenLexema.append("T_SYMBOL_ATTRIBUTION");
-            break;
         default:
             tokenLexema.append("N/A");
             break;
@@ -499,9 +488,9 @@ public class Lexico {
 
     private static void abreArquivo() {
 
+        final String inputDirectory = "C:/fontes/dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
         // final String inputDirectory =
-        // "C:/fontes/dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
-        final String inputDirectory = "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
+        // "/home/joaovperin/Projetos/Dart/DartLearning/DartCli/CompilerProject/NOTES_pt_BR/Aula_001-20190806";
         // JFileChooser fileChooser = new JFileChooser();
         // fileChooser.setCurrentDirectory(new File(inputDirectory));
 

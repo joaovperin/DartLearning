@@ -61,7 +61,7 @@ Segundo a hierarquia de Chomsky, linguagens de programação são gramáticas de
 ----------
 
 ### **Homework:**
-O professor nos deu o código fonte do analisador léxico da linguagem python (incompleto) e solicitou que implementássemos a validação para os tokens das quatro operações (+,-,*,/) e o sinal de :
+O professor nos deu o código fonte do analisador léxico da linguagem python (incompleto) e solicitou que implementássemos a validação para os tokens das quatro operações (+,-,*,/) e o sinal de ':'. Posteriormente, também foi solicitado que fosse implementado os operadores de comparação (>, >=, <=, <, ==, !=)
 
 ### **Keywords to study:** *lookahed*
 

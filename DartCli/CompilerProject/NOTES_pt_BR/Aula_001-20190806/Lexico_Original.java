@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.filechooser.FileFilter;
 
 /**
- * Lexico - Classe para implementação de um analisador Léxico básico
+ * Lexico - Classe para implementaï¿½ï¿½o de um analisador Lï¿½xico bï¿½sico
  * 
  * @author Ricardo Ferreira de Oliveira
  * @author turma de compiladores de 1/2019
@@ -96,9 +96,9 @@ public class Lexico {
           }
           
           if ( token == T_ERRO_LEX ) {
-              JOptionPane.showMessageDialog( null, mensagemDeErro, "Erro Léxico!", JOptionPane.ERROR_MESSAGE );
+              JOptionPane.showMessageDialog( null, mensagemDeErro, "Erro Lï¿½xico!", JOptionPane.ERROR_MESSAGE );
           } else {
-              JOptionPane.showMessageDialog( null, "Análise Léxica terminada sem erros léxicos", "Análise Léxica terminada!", JOptionPane.INFORMATION_MESSAGE );
+              JOptionPane.showMessageDialog( null, "Anï¿½lise Lï¿½xica terminada sem erros lï¿½xicos", "Anï¿½lise Lï¿½xica terminada!", JOptionPane.INFORMATION_MESSAGE );
           }
 
           exibeTokens();
@@ -276,7 +276,7 @@ public class Lexico {
          token = T_FIM_FONTE;    	
     } else {
     	token = T_ERRO_LEX;
-    	mensagemDeErro = "Erro Léxico na linha: " + linhaAtual + "\nReconhecido ao atingir a coluna: " + colunaAtual + "\nLinha do Erro: <" + linhaFonte + ">\nToken desconhecido: " + lookAhead;
+    	mensagemDeErro = "Erro Lï¿½xico na linha: " + linhaAtual + "\nReconhecido ao atingir a coluna: " + colunaAtual + "\nLinha do Erro: <" + linhaFonte + ">\nToken desconhecido: " + lookAhead;
     	sbLexema.append( lookAhead );
     }
         
@@ -355,7 +355,7 @@ public class Lexico {
 	private static boolean abreFonte( File fileName ) {
 
 		if( arqFonte == null || fileName.getName().trim().equals( "" ) ) {
-			JOptionPane.showMessageDialog( null, "Nome de Arquivo Inválido", "Nome de Arquivo Inválido", JOptionPane.ERROR_MESSAGE );
+			JOptionPane.showMessageDialog( null, "Nome de Arquivo Invï¿½lido", "Nome de Arquivo Invï¿½lido", JOptionPane.ERROR_MESSAGE );
 			return false;
 		} else {
 			linhaAtual = 1;
@@ -392,7 +392,7 @@ public class Lexico {
 	private static boolean gravaSaida( File fileName ) {
 
 		if( arqDestino == null || fileName.getName().trim().equals( "" ) ) {
-			JOptionPane.showMessageDialog( null, "Nome de Arquivo Inválido", "Nome de Arquivo Inválido", JOptionPane.ERROR_MESSAGE );
+			JOptionPane.showMessageDialog( null, "Nome de Arquivo Invï¿½lido", "Nome de Arquivo Invï¿½lido", JOptionPane.ERROR_MESSAGE );
 			return false;
 		} else {
 			FileWriter fw;
@@ -405,7 +405,7 @@ public class Lexico {
 				bfw.close();
 				JOptionPane.showMessageDialog( null, "Arquivo Salvo: " + arqDestino, "Salvando Arquivo", JOptionPane.INFORMATION_MESSAGE );
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog( null, e.getMessage(), "Erro de Entrada/Saída", JOptionPane.ERROR_MESSAGE );
+				JOptionPane.showMessageDialog( null, e.getMessage(), "Erro de Entrada/Saï¿½da", JOptionPane.ERROR_MESSAGE );
 			} 
 			return true;
 		}
@@ -428,7 +428,7 @@ public class Lexico {
 }
 
 /**
- * Classe Interna para criação de filtro de seleção
+ * Classe Interna para criaï¿½ï¿½o de filtro de seleï¿½ï¿½o
  */
 class FiltroMe extends FileFilter {
 
@@ -447,14 +447,14 @@ class FiltroMe extends FileFilter {
 	}
 
 	/**
-	 * Retorna quais extensões poderão ser escolhidas
+	 * Retorna quais extensï¿½es poderï¿½o ser escolhidas
 	 */
 	public String getDescription() {
 		return "*.py";
 	}
 	
 	/**
-	 * Retorna a parte com a extensão de um arquivo
+	 * Retorna a parte com a extensï¿½o de um arquivo
 	 */
 	public String getExtensao(File arq) {
 	if(arq != null) {
